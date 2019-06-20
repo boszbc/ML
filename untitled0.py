@@ -8,7 +8,7 @@ import numpy as np
 
 filename = 'datingTestSet2.txt'
 #fr = open(C:\Users\Binchi\Desktop\Files\AiLearning-master\data\2.KNN\datingTestSet2.txt)
-filepath = os.path.join('C:\\Users\\Binchi\\','Desktop','Files','AiLearning-master','data','2.KNN',filename)
+filepath = os.path.join('C:\\Users\\n927287\\','Desktop','ML-master','ML-master','AiLearning-master','data','2.KNN',filename)
 
 #print(filepath)
 rows = 0
@@ -38,3 +38,31 @@ with open(filepath, 'r') as data:
          returnmat[index,:] = singleline[0:3]
          labelmat.append(int(singleline[-1]))
          index += 1
+
+def autonorm(dataset):
+    minVals = dataset.min(0)
+    maxVals = dataset.max(0)
+    
+    ranges = maxVals - minVals
+    m = dataset.shape[0]
+    normdataset = dataset - np.tile(minVals,(m,1))
+    normdataset = normdataset / np.tile(ranges,(m,1))
+    return normdataset, ranges, minVals
+
+
+def classify0(inX, dataset, labels, k):
+    
+#Euclidian Space
+    datasetsize = dataset.shape(0)
+    diffmat = dataset - np.tile(inX,(datasetsize,1))
+    squared = diffmat**2
+    sum_sq = squared.sum(axis = 1)
+    distances = sum_sq**0.5
+    
+    classcount = {}
+    sortedDistance = distances.argsort()
+    for i in range(k):
+        votelabel = labels[sortedDistance[i]]
+        classcount[votelabel] = classcount.get(votelabel,0) + 1
+        sortedclasscount = sorted(classcount.iteritems(), key= operator.itemgetter(1), reverse = True)
+    return sortedclasscount[0][0]
